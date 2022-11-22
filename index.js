@@ -2,9 +2,11 @@ import express from "express";
 import 'dotenv/config'
 import "./database/connect.js"
 import routerRenombrado from "./routes/authRoutes.js";
+import cookieParser from "cookie-parser";
 
 const app = express()
 
+app.use(cookieParser());
 app.use(express.json())
 // todas las rutas que vengan de routerRenombrado, tendran esa base /api/v1
 app.use("/api/v1/auth", routerRenombrado)

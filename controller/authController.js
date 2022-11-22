@@ -1,13 +1,10 @@
-import { validationResult } from "express-validator";
-// import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { User } from "../model/chema_user.js";
-
-
+import { generaRefreshToken, generaToken } from "../utils/generaToken.js";
 
 export const registro  = async(req, res) => {
     // console.log(req.body);
     const {email, password} = req.body
-    const errors = validationResult(req)
 
     try {
         // primero busco en el onjeto User, el email.
@@ -28,11 +25,7 @@ export const registro  = async(req, res) => {
         }
     }
 
-    // if (!errors.isEmpty()) {
-    //     return res.status(400).json({errors: errors.array()})
-    // }
-
-    // res.json({ok: "caterpie"})
+    res.json({ok: "caterpie"})
 }
 
 
@@ -51,8 +44,33 @@ export const login = async(req, res) => {
             return res.status(403).json({error: "contraseña incorrecta"})
         }
 
-        return res.json({ok: "login"})
+        // GENERAR JWT
+        const {token, expiresIn} = generaToken(existsUser._id)
+        generaRefreshToken(existsUser._id, res)
+
+        return res.json({token, expiresIn})
     } catch (error) {
         console.log(error);
+    }
+}
+
+export const infoUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.uid)
+        res.json({email: user.email, id: user._id})
+    } catch {
+        console.log(error);
+    }
+}
+
+export const refreshToken = (req, res) => {
+    try {
+
+
+        const {token, expiresIn} = generaToken(req.uid)
+
+        return res.json({token, expiresIn})
+    } catch (error) {
+        console.log(error.message);
     }
 }

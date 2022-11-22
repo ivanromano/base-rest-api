@@ -1,19 +1,18 @@
 import express from "express";
-import { login, registro } from "../controller/authController.js";
-import { body } from "express-validator";
+import { infoUser, login, registro, refreshToken } from "../controller/authController.js";
+import { requireToken } from "../middlewares/requireToken.js";
+import { logout } from "../utils/generaToken.js";
+import { requireRefreshToken } from "../middlewares/requireRefreshToken.js";
+import { validacionesLogin, validacionesRegistro } from "../middlewares/validator.js";
 
 const router = express.Router()
 
-router.post('/register', [
-    body('email', 'formato de email incorrecto').trim().isEmail().normalizeEmail(),
-    body('password', 'minimo 6 caracteres').trim().isLength({min: 6}),
-    body("password", "formato de contraseña incorrecta").custom((value, {req}) => {
-        if (value !== req.body.repassword) {
-            throw new Error('no coinciden las contraaseñas')
-        }
-        return value
-    })
-] ,registro)
-router.post('/login', login)
+router.post('/register', validacionesRegistro, registro)
+
+router.post('/login', validacionesLogin, login)
+
+router.get("/protected", requireToken, infoUser)
+router.get('/refresh', requireRefreshToken, refreshToken)
+router.get('/logout', logout)
 
 export default router
