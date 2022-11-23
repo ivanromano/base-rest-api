@@ -1,5 +1,8 @@
-import { validationResult } from "express-validator";
+import { param, validationResult } from "express-validator";
 import { body } from "express-validator";
+import axios from 'axios';
+
+
 
 export const ValidacionExpress = (req, res, next) => {
     const errors = validationResult(req)
@@ -10,6 +13,11 @@ export const ValidacionExpress = (req, res, next) => {
 
     next()
 }
+
+export const paramsLinkValidator = [
+    param("id", "formato no valido (express-validator").escape(),
+    ValidacionExpress
+]
 
 export const validacionesRegistro = [
     body('email', 'formato de email incorrecto').trim().isEmail().normalizeEmail(),
@@ -28,4 +36,17 @@ export const validacionesLogin = [
     body('email', 'formato de email incorrecto').trim().isEmail().normalizeEmail(),
     body('password', 'minimo 6 caracteres').trim().isLength({min: 6}),
     ValidacionExpress
+]
+
+export const validacionLink = [
+    body('longLink', 'formato incorrecto').trim().notEmpty().exists().custom(async value => {
+        try {
+            await axios.get(value)
+            return value
+            console.log("rescatate barrilete");
+        } catch (error) {
+            console.log(error.message);
+            throw new Error('no coinciden las contraaseñas')
+        }
+    }), ValidacionExpress
 ]

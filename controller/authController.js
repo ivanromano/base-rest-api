@@ -12,20 +12,23 @@ export const registro  = async(req, res) => {
         if (newuser) {
             throw {code: 11000}
         }
-// ahora hago que newuser sea todo el objeto User
+        // ahora hago que newuser sea todo el objeto User
         newuser = new User({email: email, password: password})
         console.log(newuser);
 
+        // jwt
+        const {token, expiresIn} = generaToken(newuser._id)
+        generaRefreshToken(newuser._id, res)
+
         await newuser.save()
-        return res.json({ok: "caterpie"})
+        return res.status(201).json({token, expiresIn})
     } catch (error) {
         console.log(error.code);
         if (error.code === 11000) {
             return res.status(400).json({error: "ya existe este usuario"})
         }
+        return res.status(500).json({error: "error de servidor"})
     }
-
-    res.json({ok: "caterpie"})
 }
 
 
@@ -48,9 +51,11 @@ export const login = async(req, res) => {
         const {token, expiresIn} = generaToken(existsUser._id)
         generaRefreshToken(existsUser._id, res)
 
+        console.log(existsUser._id);
         return res.json({token, expiresIn})
     } catch (error) {
         console.log(error);
+        return res.status(500).json({error: "error de servidor"})
     }
 }
 
@@ -65,8 +70,6 @@ export const infoUser = async (req, res) => {
 
 export const refreshToken = (req, res) => {
     try {
-
-
         const {token, expiresIn} = generaToken(req.uid)
 
         return res.json({token, expiresIn})

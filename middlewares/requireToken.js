@@ -1,9 +1,8 @@
 import jwt from "jsonwebtoken"
 
-
 export const requireToken = (req, res, next) => {
     try {
-        let token = req.cookie.authorization
+        let token = req.headers.authorization
         console.log(token);
 
         // el beer nos impide usar el token, vamos a sacarlo del objeto token

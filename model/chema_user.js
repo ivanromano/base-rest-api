@@ -37,4 +37,4 @@ chema_user.methods.comparePassword = async function (frontendPassword) {
     return await bcryptjs.compare(frontendPassword, this.password)
 }
 
-export const User = mongoose.model('User', chema_user)
+export const User = mongoose.model('usuario', chema_user)
