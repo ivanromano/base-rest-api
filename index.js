@@ -8,7 +8,7 @@ import redirectRenombrado from './routes/redirectRoutes.js'
 import cors from 'cors'
 const app = express()
 
-const whiteList = [process.env.ORIGIN2]
+const whiteList = [process.env.ORIGIN2, process.env.ORIGIN3]
 
 app.use(cors({
     origin: function(origin, callback) {
