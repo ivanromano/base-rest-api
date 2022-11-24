@@ -12,7 +12,7 @@ const router = Router()
 
 // middleware que valida si existe el token. el usuario con su token lo vamos a usar
 router.get('/', requireToken, getLink)
-router.get('/:id', requireToken, getLinkPARAM)
+router.get('/:nanoLink', getLinkPARAM)
 router.post('/', requireToken, validacionLink, createLink)
 router.delete('/:id', requireToken, paramsLinkValidator, deleteLink)
 

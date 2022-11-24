@@ -14,17 +14,31 @@ export const getLink = async(req, res) => {
 
 export const getLinkPARAM = async(req, res) => {
     try {
-        const {id} = req.params
-        const link = await Link.findById(id)
+        const {nanoLink} = req.params
+        const link = await Link.findOne({nanoLink})
 
         if (!link) return res.status(404).json({error: "no existe el link"})
-        if (!link.uid.equals(req.uid)) return res.status(404).json({error: "no te pertenece el id"})
-        return res.json({link})
+        return res.json({longLink: link.longLink})
     } catch (error) {
         console.log(error.message);
         return res.status(500).json({error: 'error de servidor'})
     }
 }
+
+// crud tradicional
+// export const getLinkPARAM = async(req, res) => {
+//     try {
+//         const {id} = req.params
+//         const link = await Link.findById(id)
+
+//         if (!link) return res.status(404).json({error: "no existe el link"})
+//         if (!link.uid.equals(req.uid)) return res.status(404).json({error: "no te pertenece el id"})
+//         return res.json({link})
+//     } catch (error) {
+//         console.log(error.message);
+//         return res.status(500).json({error: 'error de servidor'})
+//     }
+// }
 
 export const createLink = async(req, res) => {
     try {
