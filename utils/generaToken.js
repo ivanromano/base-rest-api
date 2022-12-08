@@ -11,9 +11,9 @@ export const generaToken = (uid) => {
     }
 }
 
-export const logout = () => {
-    res.clearCookie('refresh')
-    res.json({pokedios: "victini"})
+export const logout = (req, res) => {
+    res.clearCookie('refreshtoken')
+    res.json({ok: true})
 }
 
 export const generaRefreshToken = (uid, res) => {

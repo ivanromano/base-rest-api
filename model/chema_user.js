@@ -3,6 +3,11 @@ import mongoose from "mongoose";
 // const {Schema, model} = mongoose
 
 const chema_user = new mongoose.Schema({
+    userName: {
+        type: String,
+        required: true,
+        trim: true,
+    },
     email: {
         type: String,
         required: true,

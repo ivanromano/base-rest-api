@@ -1,5 +1,5 @@
 import express from "express";
-import { infoUser, login, registro, refreshToken } from "../controller/authController.js";
+import { infoUser, login, registro, refreshToken, cerrarSesion } from "../controller/authController.js";
 import { requireToken } from "../middlewares/requireToken.js";
 import { logout } from "../utils/generaToken.js";
 import { requireRefreshToken } from "../middlewares/requireRefreshToken.js";

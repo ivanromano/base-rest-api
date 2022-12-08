@@ -4,7 +4,7 @@ import { generaRefreshToken, generaToken } from "../utils/generaToken.js";
 
 export const registro  = async(req, res) => {
     // console.log(req.body);
-    const {email, password} = req.body
+    const {userName, email, password} = req.body
 
     try {
         // primero busco en el onjeto User, el email.
@@ -13,7 +13,7 @@ export const registro  = async(req, res) => {
             throw {code: 11000}
         }
         // ahora hago que newuser sea todo el objeto User
-        newuser = new User({email: email, password: password})
+        newuser = new User({userName: userName, email: email, password: password})
         console.log(newuser);
 
         // jwt
@@ -33,7 +33,7 @@ export const registro  = async(req, res) => {
 
 
 export const login = async(req, res) => {
-    const {email, password} = req.body
+    const {userName, email, password} = req.body
     try {
         let existsUser = await User.findOne({email})
 
@@ -73,6 +73,15 @@ export const refreshToken = (req, res) => {
         const {token, expiresIn} = generaToken(req.uid)
 
         return res.json({token, expiresIn})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+export const cerrarSesion = (req, res) => {
+    try {
+        return res.clearCookie("refreshtoken")
+        // res.json({ok: true})
     } catch (error) {
         console.log(error.message);
     }

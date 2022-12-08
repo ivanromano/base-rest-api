@@ -14,7 +14,7 @@ const router = Router()
 router.get('/', requireToken, getLink)
 router.get('/:nanoLink', getLinkPARAM)
 router.post('/', requireToken, validacionLink, createLink)
-router.delete('/:id', requireToken, paramsLinkValidator, deleteLink)
+router.delete('/:id', deleteLink)
 
 
 export default router
